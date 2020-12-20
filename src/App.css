@@ -1,3 +1,7 @@
+td {
+  vertical-align: middle;
+}
+
 .App {
   text-align: center;
 }
@@ -37,3 +41,4 @@
     transform: translateY(0px)
   }
 }
+

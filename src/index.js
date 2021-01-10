@@ -9,28 +9,33 @@ import { format } from 'date-fns';
 
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import gamesInfoReducer from './gamesInfoSlice';
-import teamsInfoReducer, { initialFilter } from './teamsInfoSlice';
+import reducer from './slices';
+import { initialFilter } from './slices/teamsInfoSlice';
 import routes from './routes';
-import serverOptions from './apiConfig';
-import data from './test_data_20-12-07';
+import { options as serverOptions } from './apiConfig';
+// import data from './test_data_20-12-07';
 
 (async () => {
+  console.dir(process.env);
   const rootElement = document.getElementById('root');
 
-  // const currentDate = format(new Date(), 'yyyy-MM-dd');
-  // const url = routes.dayStatPath(currentDate);
+  const currentDate = format(new Date(), 'yyyy-MM-dd');
+  const url = routes.dayStatPath(currentDate);
 
-  // let data;
+  let data;
 
-  // try {
-  //   const response = await axios.get(url, serverOptions);
-  //   data = response.data;
-  // } catch (error) {
-  //   console.error(error);
-  //   rootElement.innerHTML = '<h3 class="p-3">Cервер статистики недоступен, попробуйте перезагрузить страницу.<br> При повторной ошибке обратитесь в техподдержку.</h3>';
-  //   return;
-  // }
+  try {
+    const response = await axios.get(url, serverOptions);
+    data = response.data;
+    const { error } = data.api;
+    if (error) {
+      throw Error(error);
+    }
+  } catch (error) {
+    console.error(error);
+    rootElement.innerHTML = `<h3 class="p-3">Cервер статистики недоступен, попробуйте перезагрузить страницу.<br> При повторной ошибке обратитесь в техподдержку.</h3 ><div class="m-3">${error}</div>`;
+    return;
+  }
 
   const preloadedState = {
     gamesInfo: {
@@ -38,16 +43,14 @@ import data from './test_data_20-12-07';
       gamesFilter: initialFilter,
     },
     teamsInfo: {
-      teamsStats: {},
+      filtredTeams: [],
       teamsFilters: [initialFilter],
+      requestState: '',
     },
   };
 
   const store = configureStore({
-    reducer: {
-      gamesInfo: gamesInfoReducer,
-      teamsInfo: teamsInfoReducer,
-    },
+    reducer,
     preloadedState,
   });
 

@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
-import { setTeamsFilter } from './teamsInfoSlice';
+import { actions as teamsActions } from './teamsInfoSlice';
+import { isFilterMatch } from '../utils';
 
 export const gamesInfoSlice = createSlice({
   name: 'gamesInfo',
@@ -9,40 +10,19 @@ export const gamesInfoSlice = createSlice({
     gamesFilter: {},
   },
   extraReducers: {
-    [setTeamsFilter.type]: (state, action) => {
-      if (action.payload.index === 0) {
-        state.gamesFilter = {
-          ...state.gamesFilter,
-          ...action.payload.newParams,
-        };
+    [teamsActions.changeTeamsFilter.type]: (state, action) => {
+      const { paramName, index, newState } = action.payload;
+      if (index === 0) {
+        state.gamesFilter[paramName] = newState;
       }
     },
   },
 });
 
-const filterActions = {
-  equal: (realValue, filterValue) => realValue === filterValue,
-  gt: (realValue, filterValue) => realValue >= filterValue,
-  lt: (realValue, filterValue) => realValue <= filterValue,
-};
+const successfulStatuses = ['FT', 'AET', 'PEN'];
 
-const isFilterMatch = (goals, missedGoals, filter) => {
-  const {
-    goalsFilterAction,
-    goalsFilterValue,
-    missedGoalsFilterAction,
-    missedGoalsFilterValue,
-  } = filter;
-
-  return (
-    filterActions[goalsFilterAction](goals, goalsFilterValue)
-    && filterActions[missedGoalsFilterAction](missedGoals, missedGoalsFilterValue)
-  );
-};
-
-export const selectFiltredTeamsIds = (state) => {
+export const selectFiltredTeamsFromGames = (state) => {
   const { gamesStats, gamesFilter } = state.gamesInfo;
-  const successfulStatuses = ['FT', 'AET', 'PEN'];
 
   const filtredTeamsIds = gamesStats.reduce((acc, gameStat) => {
     if (!successfulStatuses.includes(gameStat.statusShort)) {
@@ -62,6 +42,7 @@ export const selectFiltredTeamsIds = (state) => {
         name: homeTeamName,
         league: leagueName,
         country: ligueCountry,
+        stats: gameStat,
       };
     }
     if (isFilterMatch(goalsAwayTeam, goalsHomeTeam, gamesFilter)) {
@@ -70,6 +51,7 @@ export const selectFiltredTeamsIds = (state) => {
         name: awayTeamName,
         league: leagueName,
         country: ligueCountry,
+        stats: gameStat,
       };
     }
 
@@ -79,6 +61,12 @@ export const selectFiltredTeamsIds = (state) => {
   return Object.values(filtredTeamsIds);
 };
 
-export const selectGamesFilter = (state) => state.gamesInfo.gamesFilter;
+// export const selectGamesFilter = (state) => state.gamesInfo.gamesFilter;
+
+export const { actions } = gamesInfoSlice;
+
+export const selectors = {
+  selectFiltredTeamsFromGames,
+};
 
 export default gamesInfoSlice.reducer;

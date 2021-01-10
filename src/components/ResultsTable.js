@@ -1,10 +1,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { selectFiltredTeams } from '../teamsInfoSlice';
+import { selectors } from '../slices';
 
 const ResultsTable = () => {
-  const filtredTeams = useSelector(selectFiltredTeams);
+  const filtredTeams = useSelector(selectors.selectFiltredTeams);
 
   return (
     <table className="table table-borderless">

@@ -1,7 +1,11 @@
-export default {
+export const options = {
   params: { timezone: 'Europe/Moscow' },
   headers: {
-    'x-rapidapi-key': 'e7bc79b2348d096de5dda6578f977b4d',
+    'x-rapidapi-key': process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_KEY : process.env.API_KEY,
     'x-rapidapi-host': 'https://v2.api-football.com/',
   },
 };
+
+export const maxFiltersAmount = 3;
+
+export const filterDefaultValue = 0;

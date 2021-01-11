@@ -21,9 +21,8 @@ jobs:
       run: npm install
     - name: Build page
       env: # Or as an environment variable
-        TEST2: ${{ secrets.TEST }}
-        REACT_APP_TEST2: ${{ secrets.TEST }}
-      run: REACT_APP_TEST3=${{ secrets.TEST }} npm run build
+        REACT_APP_TEST: ${{ secrets.TEST1 }}
+      run: npm run build
     - name: Deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v3
       with:

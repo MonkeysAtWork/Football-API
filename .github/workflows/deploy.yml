@@ -20,9 +20,6 @@ jobs:
     - name: Install Packages
       run: npm install
     - name: Build page
-      with: # Set the secret as an input
-        TEST1: ${{ secrets.TEST }}
-        REACT_APP_TEST1: ${{ secrets.TEST }}
       env: # Or as an environment variable
         TEST2: ${{ secrets.TEST }}
         REACT_APP_TEST2: ${{ secrets.TEST }}

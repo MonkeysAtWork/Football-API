@@ -3,7 +3,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { actions } from '../../slices';
-import { filterDefaultValue } from '../../apiConfig';
+import { filterDefaultValue } from '../../config';
 
 const FilterItem = (props) => {
   const { filterState, index } = props;

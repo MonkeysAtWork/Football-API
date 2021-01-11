@@ -4,7 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import routes from '../routes';
 // import teamTestData from './teamTestData';
-import { maxFiltersAmount, options, filterDefaultValue } from '../apiConfig';
+import { maxFiltersAmount, options, filterDefaultValue } from '../config';
 import { isFilterMatch } from '../utils';
 
 export const initialFilter = {

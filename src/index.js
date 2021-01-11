@@ -12,10 +12,11 @@ import * as serviceWorker from './serviceWorker';
 import reducer from './slices';
 import { initialFilter } from './slices/teamsInfoSlice';
 import routes from './routes';
-import { options as serverOptions } from './apiConfig';
+import { options as serverOptions } from './config';
 // import data from './test_data_20-12-07';
 
 (async () => {
+  console.dir(process.env);
   const rootElement = document.getElementById('root');
 
   const currentDate = format(new Date(), 'yyyy-MM-dd');
